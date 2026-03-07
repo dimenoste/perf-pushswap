@@ -53,7 +53,7 @@ Usage: ./bench <push_swap_path> [size] [algorithm] [runs]
 Arguments / Options:
   <push_swap_path>   Path to your push_swap executable
   [size]             Number of integers (positive integer > 1)
-  [algorithm]        Optional: simple | medium | complex | adaptive | compare
+  [algorithm]        Optional/ Relevant for new 42 project: simple | medium | complex | adaptive | compare
                      If omitted, the project may choose the algorithm internally
   [runs]             Optional number of runs (default: 200)
   clean              Remove all CSVs and plots
@@ -67,7 +67,7 @@ Arguments / Options:
 ./bench ./push_swap 10
 ```
 
-- Benchmarks your default algorithm (it should be adaptive as specified in the 42 subject)
+- Benchmarks your default algorithm (it should be adaptive as specified in the 2025 42 subject)
 - 10 integers, 200 runs  
 
 **Example Output:**
@@ -78,7 +78,7 @@ Saved raw data: data/simple_n10.csv
 Saved plot from CSV: plots/simple_n10.png
 ```
 
-### Specify the algorithm complexity as per new subject of pushswap (2026)
+### Specify the algorithm complexity as per new subject of pushswap (2025)
 
 ```bash
 ./bench ./push_swap 500 medium 100
@@ -86,7 +86,7 @@ Saved plot from CSV: plots/simple_n10.png
 Benchmarks `medium` algorithm
 500 integers, 100 runs
 
-### Compare All Algorithms
+### Compare All Algorithms (only for new 2025 project)
 
 ```bash
 ./bench ./push_swap 500 compare 500
@@ -155,6 +155,6 @@ Clean complete.
 ## Notes
 
 - `push_swap` executable must exist and be executable.  
-- Algorithms: `simple`, `medium`, `complex`, `adaptive`, `compare`  
+- Algorithms (relevant for new 2025 project) : `simple`, `medium`, `complex`, `adaptive`, `compare`  
 - `size` must be a positive integer > 1 and ≤ `MAX_INT` (default 1000)  
 - Each run uses a unique sequence with a disorder from 0.01 to 0.99. Run value must be greater than 2.
