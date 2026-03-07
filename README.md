@@ -52,7 +52,7 @@ Usage: ./bench <push_swap_path> [size] [algorithm] [runs]
 
 Arguments / Options:
   <push_swap_path>   Path to your push_swap executable
-  [size]             Number of integers (positive integer > 1)
+  [size]             Number of integers to sort (positive integer > 1)
   [algorithm]        Optional/ Relevant for new 42 project: simple | medium | complex | adaptive | compare
                      If omitted, the project may choose the algorithm internally
   [runs]             Optional number of runs (default: 200)
@@ -68,14 +68,14 @@ Arguments / Options:
 ```
 
 - Benchmarks your default algorithm (it should be adaptive as specified in the 2025 42 subject)
-- 10 integers, 200 runs  
+- sort 10 integers, 200 runs  
 
 **Example Output:**
 ```bash
-run=1/5 algo=simple disorder=0.42 moves=12 time=0.0023s
+run=1/5 algo=default disorder=0.42 moves=12 time=0.0023s
 
-Saved raw data: data/simple_n10.csv
-Saved plot from CSV: plots/simple_n10.png
+Saved raw data: data/default_n10.csv
+Saved plot from CSV: plots/default_n10.png
 ```
 
 ### Specify the algorithm complexity as per new subject of pushswap (2025)
