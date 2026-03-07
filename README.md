@@ -45,15 +45,14 @@ chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 
 **Output:**
 ```
-Usage: ./bench [options] <push_swap_path> <algorithm> <size> [runs]
+Usage: ./bench <push_swap_path> <algorithm> <size> [runs]
 
 Arguments / Options:
   <push_swap_path>   Path to push_swap executable
   <algorithm>        simple | medium | complex | adaptive | compare
   <size>             Number of integers (positive integer)
   [runs]             Number of runs per algorithm (default: 200)
-  --clean            Remove all CSVs and plots
-  clean              Same as --clean
+  clean            Remove all CSVs and plots
 ```
 
 ---
