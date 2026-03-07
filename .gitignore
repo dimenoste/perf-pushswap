@@ -12,7 +12,6 @@ __pycache__/
 
 # Ignore generated data and plots
 data/
-plots/
 
 # Ignore system files
 .DS_Store
