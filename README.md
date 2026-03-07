@@ -13,9 +13,10 @@ The goal of Push-Swap is to sort one sequence of number using two stacks
 
 - Number of **moves** performed  
 - Execution **time**  
-- Initial **disorder** of the sequence  
+- Initial **disorder** of the sequence
+Across multiple runs.
 
-Results are saved as CSV and plots for easy comparison.
+Results are saved as CSV and plots for easy comparison and further research.
 
 ---
 
