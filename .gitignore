@@ -1,0 +1,19 @@
+# Ignore Python virtual environment
+pushswap_env/
+venv/
+.env/
+requirements.txt
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore generated data and plots
+data/
+plots/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
