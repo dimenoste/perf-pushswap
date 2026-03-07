@@ -106,7 +106,7 @@ Saved comparison plot: plots/compare_n500.png
 
 ![Example Plot](plots/complex_n500.png)
 
-porduce by the benchmark for a complex algo (new subject as of 2026)
+porduced by the benchmark for a complex algo (new subject as of 2026)
 ```bash
 ./bench ./push_swap 500 complex
 ``` 
