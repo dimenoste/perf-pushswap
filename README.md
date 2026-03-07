@@ -80,7 +80,7 @@ Saved plot from CSV: plots/simple_n10.png
 
 ### Specify the algorithm complexity as per new subject of pushswap (2026)
 
-...
+...bash
 ./bench ./push_swap 20 medium 100
 ```
 Benchmarks medium algorithm
