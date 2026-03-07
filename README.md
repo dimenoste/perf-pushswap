@@ -71,9 +71,9 @@ Arguments / Options:
 - 10 integers, 200 runs  
 
 **Example Output:**
-```
+```bash
 run=1/5 algo=simple disorder=0.42 moves=12 time=0.0023s
-...
+
 Saved raw data: data/simple_n10.csv
 Saved plot from CSV: plots/simple_n10.png
 ```
@@ -85,14 +85,12 @@ Saved plot from CSV: plots/simple_n10.png
 ```
 Benchmarks medium algorithm
 20 integers, 100 runs
----
 
 ### Compare All Algorithms
 
 ```bash
 ./bench ./push_swap 500 compare 500
 ```
-
 - Runs: `simple`, `medium`, `complex`, `adaptive`  
 - Size = 500, runs = 500  
 
