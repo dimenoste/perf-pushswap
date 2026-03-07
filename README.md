@@ -45,14 +45,15 @@ chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 
 **Output:**
 ```
-Usage: ./bench <push_swap_path> <algorithm> <size> [runs]
+Usage: ./bench <push_swap_path> [size] [algorithm] [runs]
 
 Arguments / Options:
-  <push_swap_path>   Path to push_swap executable
-  <algorithm>        simple | medium | complex | adaptive | compare
-  <size>             Number of integers (positive integer)
-  [runs]             Number of runs per algorithm (default: 200)
-  clean            Remove all CSVs and plots
+  <push_swap_path>   Path to your push_swap executable
+  [size]             Number of integers (positive integer > 1)
+  [algorithm]        Optional: simple | medium | complex | adaptive | compare
+                     If omitted, the project may choose the algorithm internally
+  [runs]             Optional number of runs (default: 200)
+  clean              Remove all CSVs and plots
 ```
 
 ---
@@ -60,11 +61,11 @@ Arguments / Options:
 ### Benchmark Single Algorithm
 
 ```bash
-./bench ./push_swap simple 10 5
+./bench ./push_swap 10
 ```
 
-- Benchmarks `simple` algorithm  
-- 10 integers, 5 runs  
+- Benchmarks your default algorithm (it should be adaptive as specified in the 42 subject)
+- 10 integers, 200 runs  
 
 **Example Output:**
 ```
@@ -74,16 +75,22 @@ Saved raw data: data/simple_n10.csv
 Saved plot from CSV: plots/simple_n10.png
 ```
 
+### Specify the algorithm complexity as per new subject of pushswap (2026)
+./bench ./push_swap 20 medium 100
+
+Benchmarks medium algorithm
+
+20 integers, 100 runs
 ---
 
 ### Compare All Algorithms
 
 ```bash
-./bench ./push_swap compare 500
+./bench ./push_swap 500 compare 500
 ```
 
 - Runs: `simple`, `medium`, `complex`, `adaptive`  
-- Size = 500, default runs = 200  
+- Size = 500, runs = 500  
 
 **Example Output:**
 ```

@@ -15,32 +15,26 @@ REQ_FILE="requirements.txt"
 # --------------------------
 # Help / Usage
 # --------------------------
+# --------------------------
+# Help / Usage
+# --------------------------
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-    echo "Usage:"
-    echo "  ./bench <push_swap_path> <size> [algorithm] [runs]"
+    echo "Usage: ./bench <push_swap_path> [size] [algorithm] [runs]"
     echo ""
-    echo "Arguments:"
+    echo "Arguments / Options:"
     echo "  <push_swap_path>   Path to your push_swap executable"
-    echo "  <size>             Size of the sequence to sort (integer)"
+    echo "  [size]             Number of integers in the list (integer > 1)"
     echo "  [algorithm]        Optional: simple | medium | complex | adaptive | compare"
-    echo "                     If omitted, push_swap chooses the algorithm internally."
-    echo "  [runs]             Optional: number of runs (default: 200)"
-    echo ""
-    echo "Commands:"
-    echo "  clean              Remove all benchmark data and plots"
+    echo "                     If omitted, the project can choose the algorithm internally"
+    echo "  [runs]             Optional: number of runs per algorithm (default: 200)"
+    echo "  clean              Remove all data CSVs and plots"
     echo ""
     echo "Examples:"
-    echo "  ./bench ./push_swap 100"
-    echo "      Run benchmark with default push_swap behaviour."
-    echo ""
-    echo "  ./bench ./push_swap 100 simple"
-    echo "      Benchmark using the simple algorithm."
-    echo ""
-    echo "  ./bench ./push_swap 100 simple 500"
-    echo "      Run 500 benchmarks using the simple algorithm."
-    echo ""
-    echo "  ./bench clean"
-    echo "      Remove all generated CSV data and plots."
+    echo "  ./bench ./push_swap 10               # Benchmark default algorithm to sort 10 numbers. Simulate 200 runs"
+    echo "  ./bench ./push_swap 50 simple        # Benchmark 'simple' algorithm to sort 50 numbers. Simulate 50 runs"
+    echo "  ./bench ./push_swap 20 medium 100    # Benchmark 'medium' algorithm to sort 20 numbers. Simulate 100 runs"
+    echo "  ./bench ./push_swap compare 50       # Compare all algorithms  to sort 50 numbers. 200 runs"
+    echo "  ./bench clean                         # Remove all data and plots"
     exit 0
 fi
 
