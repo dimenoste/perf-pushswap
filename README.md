@@ -7,6 +7,8 @@ A command-line tool to benchmark different `push_swap` sorting algorithms and vi
 
 ## Description
 
+The CLI is a helper to help diagnose, share and reproduce results obtained in the context of the 42 school project Push-swap. 
+The goal of Push-Swap is to sort one sequence of number using two stacks
 `perf-pushswap` benchmarks your `push_swap` executable by generating **random integer sequences** and measuring:
 
 - Number of **moves** performed  
