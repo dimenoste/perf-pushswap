@@ -88,10 +88,10 @@ Saved plot from CSV: plots/simple_n10.png
 
 **Example Output:**
 ```
-Saved raw data: data/simple_n50.csv
-Saved raw data: data/medium_n50.csv
-Saved raw data: data/complex_n50.csv
-Saved raw data: data/adaptive_n50.csv
+Saved raw data: data/simple_n500.csv
+Saved raw data: data/medium_n500.csv
+Saved raw data: data/complex_n500.csv
+Saved raw data: data/adaptive_n500.csv
 Saved comparison plot: plots/compare_n500.png
 ```
 
