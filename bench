@@ -1,0 +1,82 @@
+#!/bin/bash
+# --------------------------------------
+# ./bench <push_swap_path> <algorithm> <size> [runs]
+# Algorithms: simple, medium, complex, adaptive, compare
+# --------------------------------------
+
+set -e
+
+# --------------------------
+# Configuration
+# --------------------------
+VENV_DIR="./pushswap_env"
+SCRIPT="./src/benchmark.py"
+REQ_FILE="requirements.txt"
+
+# --------------------------
+# Help / Usage
+# --------------------------
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+    echo "Usage: ./bench [options] <push_swap_path> <algorithm> <size> [runs]"
+    echo ""
+    echo "Arguments / Options:"
+    echo "  <push_swap_path>   Path to your push_swap executable"
+    echo "  <algorithm>        Choose one of: simple | medium | complex | adaptive | compare"
+    echo "  <size>             Size of the sequence to sort (integer)"
+    echo "  [runs]             Optional: number of runs per algorithm (default: 200)"
+    echo "  clean            Remove all data CSVs and plots"
+    echo ""
+    echo "Important:"
+    echo "  - Arguments must be provided in order: push_swap_path, algorithm, size, [runs]"
+    echo "  - Only the specified algorithm names are valid."
+    echo ""
+    echo "Example usage:"
+    echo "  ./bench ./push_swap simple 10 5          # Benchmark simple algorithm 5 runs"
+    echo "  ./bench ./push_swap compare 50           # Compare all algorithms with 50 elements"
+    echo "  ./bench clean                            # Remove all data and plots"
+    exit 0
+fi
+
+# --------------------------
+# Check Python3
+# --------------------------
+if ! command -v python3 &> /dev/null; then
+    echo "Python3 is required."
+    exit 1
+fi
+
+# --------------------------
+# Create venv if missing
+# --------------------------
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Creating isolated Python environment..."
+    python3 -m venv "$VENV_DIR"
+fi
+
+# --------------------------
+# Create requirements.txt if missing
+# --------------------------
+if [ ! -f "$REQ_FILE" ]; then
+    echo "Creating $REQ_FILE with required packages..."
+    cat <<EOL > "$REQ_FILE"
+matplotlib>=3.5
+pandas>=1.5
+EOL
+fi
+
+# --------------------------
+# Install dependencies inside venv only if missing
+# --------------------------
+echo "Checking dependencies in venv..."
+if ! "$VENV_DIR/bin/python" -c "import matplotlib, pandas" &> /dev/null; then
+    echo "Installing missing packages in venv..."
+    "$VENV_DIR/bin/pip" install --upgrade pip
+    "$VENV_DIR/bin/pip" install -r "$REQ_FILE"
+else
+    echo "All dependencies already installed."
+fi
+
+# --------------------------
+# Run the Python benchmark script using venv Python
+# --------------------------
+"$VENV_DIR/bin/python" "$SCRIPT" "$@"
