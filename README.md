@@ -28,8 +28,8 @@ Results are saved as CSV and plots for easy comparison.
 ## Installation
 
 ```bash
-git clone https://github.com/<username>/cli-perf.git
-cd cli-perf
+git clone https://github.com/dimenoste/perf-pushswap.git 
+cd perf-pushswap
 chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 ```
 
