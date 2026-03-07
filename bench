@@ -1,8 +1,7 @@
 #!/bin/bash
-# --------------------------------------
-# ./bench <push_swap_path> <algorithm> <size> [runs]
+# ./bench <push_swap_path> <size> [algorithm] [runs]
 # Algorithms: simple, medium, complex, adaptive, compare
-# --------------------------------------
+# If no algorithm is specified, push_swap decides internally.
 
 set -e
 
@@ -17,23 +16,31 @@ REQ_FILE="requirements.txt"
 # Help / Usage
 # --------------------------
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-    echo "Usage: ./bench [options] <push_swap_path> <algorithm> <size> [runs]"
+    echo "Usage:"
+    echo "  ./bench <push_swap_path> <size> [algorithm] [runs]"
     echo ""
-    echo "Arguments / Options:"
+    echo "Arguments:"
     echo "  <push_swap_path>   Path to your push_swap executable"
-    echo "  <algorithm>        Choose one of: simple | medium | complex | adaptive | compare"
     echo "  <size>             Size of the sequence to sort (integer)"
-    echo "  [runs]             Optional: number of runs per algorithm (default: 200)"
-    echo "  clean            Remove all data CSVs and plots"
+    echo "  [algorithm]        Optional: simple | medium | complex | adaptive | compare"
+    echo "                     If omitted, push_swap chooses the algorithm internally."
+    echo "  [runs]             Optional: number of runs (default: 200)"
     echo ""
-    echo "Important:"
-    echo "  - Arguments must be provided in order: push_swap_path, algorithm, size, [runs]"
-    echo "  - Only the specified algorithm names are valid."
+    echo "Commands:"
+    echo "  clean              Remove all benchmark data and plots"
     echo ""
-    echo "Example usage:"
-    echo "  ./bench ./push_swap simple 10 5          # Benchmark simple algorithm 5 runs"
-    echo "  ./bench ./push_swap compare 50           # Compare all algorithms with 50 elements"
-    echo "  ./bench clean                            # Remove all data and plots"
+    echo "Examples:"
+    echo "  ./bench ./push_swap 100"
+    echo "      Run benchmark with default push_swap behaviour."
+    echo ""
+    echo "  ./bench ./push_swap 100 simple"
+    echo "      Benchmark using the simple algorithm."
+    echo ""
+    echo "  ./bench ./push_swap 100 simple 500"
+    echo "      Run 500 benchmarks using the simple algorithm."
+    echo ""
+    echo "  ./bench clean"
+    echo "      Remove all generated CSV data and plots."
     exit 0
 fi
 

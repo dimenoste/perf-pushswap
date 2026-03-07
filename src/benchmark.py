@@ -83,14 +83,16 @@ def generate_benchmark_list(size, target_fraction):
 # --------------------------
 # push_swap runner
 # --------------------------
-
 def run_pushswap(pushswap, algo, nums):
-    """Run push_swap and count moves and time"""
-    cmd = [pushswap, f"--{algo}"] + list(map(str, nums))
+    cmd = [pushswap]
+    if algo is not None:  # Only add flag if algo specified
+        cmd.append(f"--{algo}")
+    cmd += list(map(str, nums))
     start = time.perf_counter()
     proc = subprocess.run(cmd, capture_output=True, text=True)
     end = time.perf_counter()
-    moves = len(proc.stdout.strip().splitlines())
+    out = proc.stdout.strip()
+    moves = len(out.splitlines())  # Push_swap outputs one instruction per line
     return end - start, moves
 
 # --------------------------
@@ -100,15 +102,15 @@ def run_pushswap(pushswap, algo, nums):
 def benchmark(pushswap, algos, size, runs):
     results = defaultdict(lambda: {"moves": [], "disorder": [], "time": []})
     for run in range(runs):
-        # Linearly interpolate disorder 0.01 -> 0.99
         target_disorder = 0.01 + 0.98 * run / max(1, runs - 1)
         nums, actual_disorder = generate_benchmark_list(size, target_disorder)
         for algo in algos:
+            algo_key = "default" if algo is None else algo
             t, m = run_pushswap(pushswap, algo, nums)
-            results[algo]["moves"].append(m)
-            results[algo]["disorder"].append(actual_disorder)
-            results[algo]["time"].append(t)
-            print(f"run={run+1}/{runs} algo={algo} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
+            results[algo_key]["moves"].append(m)
+            results[algo_key]["disorder"].append(actual_disorder)
+            results[algo_key]["time"].append(t)
+            print(f"run={run+1}/{runs} algo={algo_key} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
     return results
 
 # --------------------------
@@ -207,6 +209,10 @@ def positive_int_greater_one(value):
 
 
 def main():
+    import sys
+    import shutil
+    import os
+
     # --------------------------
     # Handle "clean" as first argument
     # --------------------------
@@ -219,75 +225,87 @@ def main():
         sys.exit(0)
 
     # --------------------------
-    # CLI argument parser
+    # Configuration
     # --------------------------
-    parser = argparse.ArgumentParser(
-        description="Benchmark push_swap algorithms and plot results"
-    )
-    parser.add_argument("pushswap", help="Path to push_swap executable")
-    parser.add_argument("algo", help="Algorithm: simple, medium, complex, adaptive, compare")
-    parser.add_argument("size", type=positive_int_greater_one, help="Number of integers in the list")
-    parser.add_argument("runs", type=positive_int_greater_one, nargs="?", default=200, help="Number of runs per algorithm")
-    parser.add_argument("--clean", action="store_true", help="Delete all CSV data and plots")
-
-    args = parser.parse_args()
+    VALID_ALGOS = ["simple", "medium", "complex", "adaptive", "compare"]
+    pushswap = None
+    algo = None
+    size = None
+    runs = 200  # default runs
 
     # --------------------------
-    # Check push_swap executable
+    # Parse arguments manually
     # --------------------------
-    if not args.clean:  # only check if we're actually running a benchmark
-        if not os.path.isfile(args.pushswap) or not os.access(args.pushswap, os.X_OK):
-            print(f"Error: push_swap executable not found or not executable: {args.pushswap}")
+    args = sys.argv[1:]  # exclude script name
+
+    if not args:
+        print("Error: missing arguments")
+        print("Usage: ./bench <push_swap_path> [size] [algorithm] [runs]")
+        sys.exit(1)
+
+    pushswap = args[0]
+    rest = args[1:]
+
+    # Identify numeric arguments
+    for token in rest[:]:
+        if token.isdigit():
+            if size is None:
+                size = int(token)
+            else:
+                runs = int(token)
+            rest.remove(token)
+
+    # Anything left could be algorithm
+    for token in rest:
+        if token.lower() in VALID_ALGOS:
+            algo = token.lower()
+        else:
+            print(f"Error: invalid algorithm '{token}'")
+            print(f"Choose one of: {', '.join(VALID_ALGOS)}")
             sys.exit(1)
 
     # --------------------------
-    # Enforce required args only if not cleaning
+    # Validate push_swap
     # --------------------------
-    if not args.pushswap or not args.algo or not args.size:
-        parser.print_help()
+    if not os.path.isfile(pushswap) or not os.access(pushswap, os.X_OK):
+        print(f"Error: push_swap executable not found or not executable: {pushswap}")
         sys.exit(1)
 
     # --------------------------
-    # Validate size 
+    # Validate size
     # --------------------------
-    if args.size <= 1:
-        print(f"Error: size must be positive and greater that 1, got {args.size}")
+    if size is None or size <= 1:
+        print(f"Error: invalid size '{size}', must be integer > 1")
         sys.exit(1)
 
-    if args.size > MAX_INT:
-        print(f"Error: size {args.size} is larger than the maximum allowed {MAX_INT}")
+    if size > MAX_INT:
+        print(f"Error: size {size} exceeds MAX_INT={MAX_INT}")
         sys.exit(1)
 
-    # --------------------------
-    # Validate algorithm
-    # --------------------------
-    VALID_ALGOS = ["simple", "medium", "complex", "adaptive", "compare"]
-    if args.algo not in VALID_ALGOS:
-        print(f"Error: invalid algorithm '{args.algo}'")
-        print(f"Choose one of: {', '.join(VALID_ALGOS)}")
-        sys.exit(1)
     # --------------------------
     # Determine algorithms to run
     # --------------------------
-    if args.algo == "compare":
+    if algo == "compare":
         algos = ["simple", "medium", "complex", "adaptive"]
     else:
-        algos = [args.algo]
+        algos = [algo]  # could be None for default
 
     # --------------------------
     # Run benchmark
     # --------------------------
-    results = benchmark(args.pushswap, algos, args.size, args.runs)
+    results = benchmark(pushswap, algos, size, runs)
 
-    # Save CSV for reproducibility
-    for algo in algos:
-        save_results_csv(results, algo, args.size)
+    # Save CSV
+    for a in algos:
+        algo_name = "default" if a is None else a
+        save_results_csv(results, algo_name, size)
 
-    # Generate plots
-    if args.algo == "compare":
-        plot_compare_from_csv(args.size)
+    # Plot
+    if algo == "compare":
+        plot_compare_from_csv(size)
     else:
-        plot_single_from_csv(args.algo, args.size)
+        algo_name = "default" if algo is None else algo
+        plot_single_from_csv(algo_name, size)
 
 
 if __name__ == "__main__":
