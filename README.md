@@ -1,156 +1,149 @@
 # perf-pushswap
 ## Push_swap Benchmarking Tool
 
-A command-line tool to benchmark different `push_swap` sorting algorithms and visualize their behavior. The tool supports multiple algorithms, adjustable input sizes, multiple runs, and automated plot generation.
-
----
-
-## Table of Contents
-
-- [Description](#description)  
-- [Requirements](#requirements)  
-- [Installation](#installation)  
-- [Usage](#usage)  
-  - [Help](#help)  
-  - [Benchmark Single Algorithm](#benchmark-single-algorithm)  
-  - [Compare All Algorithms](#compare-all-algorithms)  
-  - [Clean Data and Plots](#clean-data-and-plots)  
-- [Output Files](#output-files)  
-- [Interpreting Plots](#interpreting-plots)  
-- [Notes](#notes)  
+A command-line tool to benchmark different `push_swap` sorting algorithms and visualize their behavior. Supports multiple algorithms, adjustable input sizes, multiple runs, and automatic plot generation.
 
 ---
 
 ## Description
 
-`perf-pushswap` allows you to benchmark your `push_swap` executable by generating **random integer sequences** of a given size and measuring:
+`perf-pushswap` benchmarks your `push_swap` executable by generating **random integer sequences** and measuring:
 
 - Number of **moves** performed  
 - Execution **time**  
 - Initial **disorder** of the sequence  
 
-It then **saves the raw results in CSV** and **generates plots** showing algorithm performance. This helps to analyze:
-
-- How the algorithm scales with input size  
-- Sensitivity to disorder in the input  
-- Relative efficiency of multiple algorithms  
+Results are saved as CSV and plots for easy comparison.
 
 ---
 
 ## Requirements
 
 - Python 3.8+  
-- Bash (for `bench` CLI script)  
-- `matplotlib` and `pandas` (installed automatically in virtual environment)  
+- Bash (for `bench` CLI)  
+- `matplotlib` and `pandas` (installed automatically in venv)  
 
 ---
 
 ## Installation
 
-1. Clone the repository:
-
 ```bash
 git clone https://github.com/<username>/cli-perf.git
 cd cli-perf
+chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 ```
 
-2. Usage
+---
 
-Help
+## Usage
+
+### Help
+
 ```bash
 ./bench --help
 ```
-Output:
-```bash
+
+**Output:**
+```
 Usage: ./bench [options] <push_swap_path> <algorithm> <size> [runs]
 
 Arguments / Options:
-  <push_swap_path>   Path to your push_swap executable
+  <push_swap_path>   Path to push_swap executable
   <algorithm>        simple | medium | complex | adaptive | compare
   <size>             Number of integers (positive integer)
-  [runs]             Optional: number of runs per algorithm (default: 200)
+  [runs]             Number of runs per algorithm (default: 200)
   --clean            Remove all CSVs and plots
   clean              Same as --clean
-  ```
+```
 
+---
 
-  Benchmark Single Algorithm
+### Benchmark Single Algorithm
+
+```bash
 ./bench ./push_swap simple 10 5
+```
 
-Benchmarks the simple algorithm
+- Benchmarks `simple` algorithm  
+- 10 integers, 5 runs  
 
-size=10 integers
-
-runs=5
-
-Example Output:
-
+**Example Output:**
+```
 run=1/5 algo=simple disorder=0.42 moves=12 time=0.0023s
 ...
 Saved raw data: data/simple_n10.csv
 Saved plot from CSV: plots/simple_n10.png
-Compare All Algorithms
-./bench ./push_swap compare 50
+```
 
-Runs all algorithms: simple, medium, complex, adaptive
+---
 
-size=`200`
+### Compare All Algorithms
 
-Default runs=`200` 
+```bash
+./bench ./push_swap compare 500
+```
 
-Example Output:
+- Runs: `simple`, `medium`, `complex`, `adaptive`  
+- Size = 500, default runs = 200  
 
+**Example Output:**
+```
 Saved raw data: data/simple_n50.csv
 Saved raw data: data/medium_n50.csv
 Saved raw data: data/complex_n50.csv
 Saved raw data: data/adaptive_n50.csv
-Saved comparison plot: plots/compare_n50.png
+Saved comparison plot: plots/compare_n500.png
+```
 
-Delete folders data and output
+**Example Plot:**
 
-Remove all generated CSV files and plots:
+![Example Plot](plots/compare_n500.png)
 
-`./bench clean`
+---
 
-Output:
+### Clean Data and Plots
 
+```bash
+./bench clean
+```
+
+**Output:**
+```
 Removed folder: data
 Removed folder: plots
 Clean complete.
-Output Files
+```
 
-Raw data CSVs: data/<algorithm>_n<size>.csv
+---
 
-Plots: plots/<algorithm>_n<size>.png or plots/compare_n<size>.png
+## Output Files
 
-File	Description
-data/simple_n10.csv	Raw benchmark results for simple algorithm, size 10
-plots/simple_n10.png	Plot of moves vs CPU time for simple algorithm
-plots/compare_n50.png	Comparison plot of all algorithms for size 50
-Interpreting Plots
+| File | Description |
+|------|-------------|
+| `data/<algorithm>_n<size>.csv` | Raw benchmark results |
+| `plots/<algorithm>_n<size>.png` | Plot of moves vs CPU time for a single algorithm |
+| `plots/compare_n<size>.png` | Comparison plot of all algorithms |
 
-X-axis: CPU time (seconds)
+---
 
-Y-axis: Number of moves performed
+## Interpreting Plots
 
-Color: Initial disorder of the sequence (0 = sorted, 1 = fully random)
+- **X-axis:** CPU time (seconds)  
+- **Y-axis:** Number of moves  
+- **Color:** Initial disorder (0 = sorted, 1 = random)  
 
-Insights:
+**Insights:**
 
-Steeper slopes → algorithm scales poorly with disorder or size
+- Steep slope → scales poorly with disorder/size  
+- Flat slope → more efficient  
+- Comparison plots show relative efficiency of multiple algorithms  
+- Example: `adaptive` often uses fewer moves on nearly sorted sequences.
 
-Flat or low slope → algorithm is more efficient
+---
 
-Comparison plots highlight differences between algorithms for the same input size
+## Notes
 
-Example: Adaptive algorithm may show fewer moves and faster execution for nearly sorted sequences compared to simple or medium.
-
-##Notes
-
-push_swap executable must be present and executable. The script checks this automatically.
-
-Algorithm names must be one of: simple, medium, complex, adaptive, compare.
-
-Input size must be a positive integer ≤ MAX_INT (default 1000).
-
-Benchmark runs with unique sequences; adjust MAX_INT in benchmark.py if needed for larger lists.
+- `push_swap` executable must exist and be executable.  
+- Algorithms: `simple`, `medium`, `complex`, `adaptive`, `compare`  
+- `size` must be a positive integer > 1 and ≤ `MAX_INT` (default 1000)  
+- Each run uses a unique sequence with a disorder from 0.01 to 0.99. Run value must be greater than 2.
