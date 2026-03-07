@@ -24,7 +24,7 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "Arguments / Options:"
     echo "  <push_swap_path>   Path to your push_swap executable"
     echo "  [size]             Number of integers in the list (integer > 1)"
-    echo "  [algorithm]        Optional: simple | medium | complex | adaptive | compare"
+    echo "  [algorithm]        Optional: (only for new pushswap project as of 2026) simple | medium | complex  | adaptive | compare"
     echo "                     If omitted, the project can choose the algorithm internally"
     echo "  [runs]             Optional: number of runs per algorithm (default: 200)"
     echo "  clean              Remove all data CSVs and plots"

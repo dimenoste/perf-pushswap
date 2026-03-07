@@ -80,18 +80,18 @@ Saved plot from CSV: plots/simple_n10.png
 
 ### Specify the algorithm complexity as per new subject of pushswap (2026)
 
-...bash
-./bench ./push_swap 20 medium 100
+```bash
+./bench ./push_swap 500 medium 100
 ```
-Benchmarks medium algorithm
-20 integers, 100 runs
+Benchmarks `medium` algorithm
+500 integers, 100 runs
 
 ### Compare All Algorithms
 
 ```bash
 ./bench ./push_swap 500 compare 500
 ```
-- Runs: `simple`, `medium`, `complex`, `adaptive`  
+- Runs: `simple`, `medium`, `complex` 
 - Size = 500, runs = 500  
 
 **Example Output:**
@@ -99,7 +99,6 @@ Benchmarks medium algorithm
 Saved raw data: data/simple_n500.csv
 Saved raw data: data/medium_n500.csv
 Saved raw data: data/complex_n500.csv
-Saved raw data: data/adaptive_n500.csv
 Saved comparison plot: plots/compare_n500.png
 ```
 
@@ -107,7 +106,7 @@ Saved comparison plot: plots/compare_n500.png
 
 ![Example Plot](plots/complex_n500.png)
 
-porduced by the benchmark for a complex algo (new subject as of 2026)
+porduced by the benchmark for a `complex` algo (new subject as of 2026)
 ```bash
 ./bench ./push_swap 500 complex
 ``` 

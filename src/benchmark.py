@@ -165,7 +165,6 @@ def plot_compare_from_csv(size):
         "simple": "o",
         "medium": "s",
         "complex": "^",
-        "adaptive": "D"
     }
 
     for algo, marker in algo_markers.items():
@@ -286,7 +285,7 @@ def main():
     # Determine algorithms to run
     # --------------------------
     if algo == "compare":
-        algos = ["simple", "medium", "complex", "adaptive"]
+        algos = ["simple", "medium", "complex"]
     else:
         algos = [algo]  # could be None for default
 
