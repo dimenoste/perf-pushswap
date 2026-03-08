@@ -99,10 +99,11 @@ Arguments:
 ./bench ./push_swap 500 medium 100
 ```
 
-- algorithm: `medium`
+- algorithm: `complex`
 - size: 500
 - runs: 100
 
+![Example Plot](plots/complex_n500.png)
 ---
 
 ### Compare all algorithms
