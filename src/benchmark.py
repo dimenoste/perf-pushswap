@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 import shutil
 import sys
+import os
 
 # --------------------------
 # Configuration
@@ -147,11 +148,31 @@ def plot_single_from_csv(algo, size):
     )
     plt.xlabel("CPU Time (s)")
     plt.ylabel("Moves")
-    plt.title(f"{algo} performance (N={size})")
-    plt.colorbar(scatter, label="Disorder")
+    cbar = plt.colorbar(scatter, label="Disorder")
+
+    # --------------------------
+    # Statistics
+    # --------------------------
+    worst = df["moves"].max()
+    best = df["moves"].min()
+    avg = df["moves"].mean()
+
+    stats_text = (
+        f"Worst moves: {worst}\n"
+        f"Best moves:  {best}\n"
+        f"Average:     {avg:.2f}"
+    )
+
+    plt.gcf().text(
+        0.88, 0.5, stats_text,
+        fontsize=10,
+        verticalalignment="center",
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8)
+    )
+
     plt.grid(True)
     out_file = f"plots/{algo}_n{size}.png"
-    plt.savefig(out_file)
+    plt.savefig(out_file, bbox_inches="tight")
     plt.close()
     print(f"Saved plot from CSV: {out_file}")
 
@@ -159,7 +180,8 @@ def plot_single_from_csv(algo, size):
 def plot_compare_from_csv(size):
     """Compare algorithms: CPU time vs moves colored by disorder, different marker per algo"""
     os.makedirs("plots", exist_ok=True)
-    plt.figure(figsize=(12, 6))
+
+    fig, ax = plt.subplots(figsize=(12, 6))
 
     algo_markers = {
         "simple": "o",
@@ -167,34 +189,101 @@ def plot_compare_from_csv(size):
         "complex": "^",
     }
 
+    scatter = None
+
+    # --------------------------
+    # Scatter plots
+    # --------------------------
     for algo, marker in algo_markers.items():
         filename = f"data/{algo}_n{size}.csv"
         if not os.path.exists(filename):
             print(f"CSV file not found: {filename}, skipping {algo}")
             continue
+
         df = pd.read_csv(filename)
-        plt.scatter(
+
+        scatter = ax.scatter(
             df["time"],
             df["moves"],
             c=df["disorder"],
             cmap="viridis",
             alpha=0.7,
             marker=marker,
-            edgecolors='k',
+            edgecolors="k",
             linewidths=0.3,
             label=algo
         )
 
-    plt.xlabel("CPU Time (s)")
-    plt.ylabel("Moves")
-    plt.title(f"Push_swap Algorithm Comparison (N={size})")
-    plt.colorbar(label="Disorder")
-    plt.legend(title="Algorithm")
-    plt.grid(True)
-    plt.tight_layout()
+    # --------------------------
+    # Axes labels and title
+    # --------------------------
+    ax.set_xlabel("CPU Time (s)")
+    ax.set_ylabel("Moves")
+    ax.set_title(f"Push_swap Algorithm Comparison (N={size})")
+    ax.grid(True)
+
+    # --------------------------
+    # Colorbar
+    # --------------------------
+    if scatter is not None:
+        cbar = fig.colorbar(scatter, ax=ax)
+        cbar.set_label("Disorder")
+
+    # --------------------------
+    # Legend
+    # --------------------------
+    ax.legend(title="Algorithm")
+
+    # --------------------------
+    # Statistics per algorithm
+    # --------------------------
+    stats_lines = []
+
+    for algo in algo_markers.keys():
+        filename = f"data/{algo}_n{size}.csv"
+        if not os.path.exists(filename):
+            continue
+
+        df = pd.read_csv(filename)
+
+        worst = df["moves"].max()
+        best = df["moves"].min()
+        avg = df["moves"].mean()
+
+        stats_lines.append(
+            f"{algo}\n"
+            f"  worst: {worst}\n"
+            f"  best:  {best}\n"
+            f"  avg:   {avg:.2f}"
+        )
+
+    stats_text = "\n\n".join(stats_lines)
+
+    # --------------------------
+    # Layout: reserve right space
+    # --------------------------
+    fig.tight_layout(rect=[0, 0, 0.80, 1])
+
+    # --------------------------
+    # Statistics box (right side)
+    # --------------------------
+    fig.text(
+        0.83,
+        0.5,
+        stats_text,
+        ha="left",
+        va="center",
+        fontsize=10,
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.9)
+    )
+
+    # --------------------------
+    # Save figure
+    # --------------------------
     out_file = f"plots/compare_n{size}.png"
-    plt.savefig(out_file)
-    plt.close()
+    fig.savefig(out_file)
+    plt.close(fig)
+
     print(f"Saved comparison plot from CSV: {out_file}")
 
 
@@ -208,9 +297,7 @@ def positive_int_greater_one(value):
 
 
 def main():
-    import sys
-    import shutil
-    import os
+
 
     # --------------------------
     # Handle "clean" as first argument
