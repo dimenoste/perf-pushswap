@@ -6,7 +6,6 @@ import time
 import argparse
 import os
 import csv
-import matplotlib.pyplot as plt
 from collections import defaultdict
 import shutil
 import sys
@@ -154,6 +153,7 @@ def compute_stats(moves):
 # Plotting
 # --------------------------
 def plot_single_from_csv(algo, size):
+    import matplotlib.pyplot as plt
     """Plot one algorithm from CSV"""
     os.makedirs("plots", exist_ok=True)
     disorders, moves, times = read_results_csv(algo, size)
@@ -202,6 +202,7 @@ def plot_single_from_csv(algo, size):
 
 
 def plot_compare_from_csv(size):
+    import matplotlib.pyplot as plt
     """Compare algorithms: CPU time vs moves colored by disorder, different marker per algo"""
     os.makedirs("plots", exist_ok=True)
 

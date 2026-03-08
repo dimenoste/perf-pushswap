@@ -12,12 +12,13 @@ VENV_DIR="./pushswap_env"
 SCRIPT="./src/benchmark.py"
 REQ_FILE="requirements.txt"
 
+
+
+
 # --------------------------
 # Help / Usage
 # --------------------------
-# --------------------------
-# Help / Usage
-# --------------------------
+
 if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "Usage: ./bench <push_swap_path> [size] [algorithm] [runs]"
     echo ""
@@ -37,6 +38,37 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "  ./bench clean                         # Remove all data and plots"
     exit 0
 fi
+
+
+# --------------------------
+# Clean
+# --------------------------
+if [[ "$1" == "clean" ]]; then
+    python3 "$SCRIPT" clean
+    exit 0
+fi
+
+# --------------------------
+# Validate push_swap path
+# --------------------------
+PUSH_SWAP="$1"
+
+if [ -z "$PUSH_SWAP" ]; then
+    echo "Error: push_swap path not provided."
+    exit 1
+fi
+
+if [ ! -f "$PUSH_SWAP" ]; then
+    echo "Error: push_swap executable not found: $PUSH_SWAP"
+    exit 1
+fi
+
+if [ ! -x "$PUSH_SWAP" ]; then
+    echo "Error: push_swap exists but is not executable."
+    exit 1
+fi
+
+
 # --------------------------
 # Ensure Python3 exists
 # --------------------------
@@ -72,6 +104,8 @@ else
         USE_VENV=0
     fi
 fi
+
+
 
 # --------------------------
 # Run benchmark
