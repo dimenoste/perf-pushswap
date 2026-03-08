@@ -132,49 +132,62 @@ def save_results_csv(results, algo, size):
 # --------------------------
 # Plotting
 # --------------------------
-
 def plot_single_from_csv(algo, size):
     """Plot one algorithm from CSV"""
     os.makedirs("plots", exist_ok=True)
     filename = f"data/{algo}_n{size}.csv"
     df = pd.read_csv(filename)
-    plt.figure(figsize=(10, 6))
-    scatter = plt.scatter(
-        df["time"],        # x-axis: CPU time
-        df["moves"],       # y-axis: moves
-        c=df["disorder"],  # color: disorder
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Scatter plot
+    scatter = ax.scatter(
+        df["time"],
+        df["moves"],
+        c=df["disorder"],
         cmap="viridis",
         alpha=0.8
     )
-    plt.xlabel("CPU Time (s)")
-    plt.ylabel("Moves")
-    cbar = plt.colorbar(scatter, label="Disorder")
 
-    # --------------------------
-    # Statistics
-    # --------------------------
+    # Labels and title
+    ax.set_xlabel("CPU Time (s)")
+    ax.set_ylabel("Moves")
+    ax.set_title(f"{algo} performance (N={size})")
+
+    # Colorbar
+    cbar = fig.colorbar(scatter, ax=ax)
+    cbar.set_label("Disorder")
+
+    # Statistics box
     worst = df["moves"].max()
     best = df["moves"].min()
     avg = df["moves"].mean()
-
     stats_text = (
         f"Worst moves: {worst}\n"
         f"Best moves:  {best}\n"
         f"Average:     {avg:.2f}"
     )
-
-    plt.gcf().text(
-        0.88, 0.5, stats_text,
+    fig.tight_layout(rect=[0, 0, 0.80, 1])  # reserve right space
+    fig.text(
+        0.83,
+        0.5,
+        stats_text,
+        ha="left",
+        va="center",
         fontsize=10,
-        verticalalignment="center",
         bbox=dict(boxstyle="round", facecolor="white", alpha=0.8)
     )
 
-    plt.grid(True)
+    ax.grid(True)
+
+    # Save figure
     out_file = f"plots/{algo}_n{size}.png"
-    plt.savefig(out_file, bbox_inches="tight")
-    plt.close()
-    print(f"Saved plot from CSV: {out_file}")
+    fig.savefig(out_file, bbox_inches="tight")
+    plt.close(fig)
+
+    # Print clickable absolute path
+    abs_path = os.path.abspath(out_file)
+    print(f"Saved plot from CSV: file://{abs_path}")
 
 
 def plot_compare_from_csv(size):
@@ -283,8 +296,8 @@ def plot_compare_from_csv(size):
     out_file = f"plots/compare_n{size}.png"
     fig.savefig(out_file)
     plt.close(fig)
-
-    print(f"Saved comparison plot from CSV: {out_file}")
+    abs_path = os.path.abspath(out_file)
+    print(f"Saved comparison plot from CSV: file://{abs_path}")
 
 
 
@@ -297,8 +310,6 @@ def positive_int_greater_one(value):
 
 
 def main():
-
-
     # --------------------------
     # Handle "clean" as first argument
     # --------------------------
