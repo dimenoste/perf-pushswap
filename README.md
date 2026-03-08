@@ -96,7 +96,7 @@ Arguments:
 ### Benchmark specific algorithm (new 42 subject)
 
 ```bash
-./bench ./push_swap 500 medium 100
+./bench ./push_swap 500 complex 500
 ```
 
 - algorithm: `complex`
