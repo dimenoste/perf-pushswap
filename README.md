@@ -2,7 +2,7 @@
 ## Push_swap Benchmarking Tool
 
 A command-line tool to benchmark different `push_swap` sorting algorithms and visualize their behavior. Supports multiple algorithms, adjustable input sizes, multiple runs, and automatic plot generation.
-Make sure you have a correct running push-swap executable.
+Make sure you have a correct running `push-swap` executable.
 
 
 ---
@@ -35,10 +35,10 @@ git clone https://github.com/dimenoste/perf-pushswap.git
 cd perf-pushswap
 chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 ```
-BEFORE ANYTHING Move your **push-swap executable inside perf-pushwap** !
+BEFORE ANYTHING Move your **`push_swap` executable inside perf-pushwap** !
 
 ```bash
-./bench ./push_swap 10
+./bench ./push_swap 100
 ```
 
 ---
