@@ -25,9 +25,7 @@ Results are saved as CSV and plots for easy comparison and further research.
 ## Requirements
 
 - Python 3.8+  
-- Bash (for `bench` CLI)  
-- `matplotlib` and `pandas` (installed automatically in venv)  
-
+- Bash (for `bench` CLI) 
 ---
 
 ## Installation
