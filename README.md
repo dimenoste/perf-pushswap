@@ -37,6 +37,10 @@ chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 ```
 BEFORE ANYTHING Move your **push-swap executable inside perf-pushwap** !
 
+```bash
+./bench ./push_swap 10
+```
+
 ---
 
 ## Usage
