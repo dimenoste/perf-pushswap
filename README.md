@@ -35,7 +35,8 @@ git clone https://github.com/dimenoste/perf-pushswap.git
 cd perf-pushswap
 chmod +x bench src/benchmark.py  # optional, Git preserves executable bit
 ```
-BEFORE ANYTHING Make sure you have a correct running push-swap executable inside perf-pushwap !
+BEFORE ANYTHING Move your **push-swap executable inside perf-pushwap** !
+
 ---
 
 ## Usage
