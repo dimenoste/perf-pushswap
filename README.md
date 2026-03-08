@@ -101,7 +101,7 @@ Arguments:
 
 - algorithm: `complex`
 - size: 500
-- runs: 100
+- runs: 500
 
 ![Example Plot](plots/complex_n500.png)
 ---
@@ -109,7 +109,7 @@ Arguments:
 ### Compare all algorithms
 
 ```bash
-./bench ./push_swap 500 compare 500
+./bench ./push_swap 500 compare 100
 ```
 
 Runs:
@@ -117,7 +117,7 @@ Runs:
 - `medium`
 - `complex`
 
-Produces a comparison plot.
+Produces a comparison plot to sort a list of 500 elements, 100 times.
 
 ---
 
