@@ -54,17 +54,17 @@ fi
 PUSH_SWAP="$1"
 
 if [ -z "$PUSH_SWAP" ]; then
-    echo "Error: push_swap path not provided."
+    echo "Error: push_swap path not provided. Compile your push_swap and move it in current folder"
     exit 1
 fi
 
 if [ ! -f "$PUSH_SWAP" ]; then
-    echo "Error: push_swap executable not found: $PUSH_SWAP"
+    echo "Error: push_swap executable not found: $PUSH_SWAP. Compile your push_swap and move it in current folder"
     exit 1
 fi
 
 if [ ! -x "$PUSH_SWAP" ]; then
-    echo "Error: push_swap exists but is not executable."
+    echo "Error: push_swap exists but is not executable. Compile your push_swap and move it in current folder"
     exit 1
 fi
 
