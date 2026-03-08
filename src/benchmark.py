@@ -6,12 +6,10 @@ import time
 import argparse
 import os
 import csv
-import pandas as pd
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import shutil
 import sys
-import os
 
 # --------------------------
 # Configuration
@@ -129,25 +127,40 @@ def save_results_csv(results, algo, size):
             writer.writerow([f"{d:.5f}", m, f"{t:.5f}"])
     print(f"Saved raw data: {filename}")
 
+
+# --------------------------
+# CSV Reading and Stats
+# --------------------------
+
+def read_results_csv(algo, size):
+    """Read CSV and return disorder[], moves[], times[] as lists"""
+    filename = f"data/{algo}_n{size}.csv"
+    disorders, moves, times = [], [], []
+    with open(filename) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            disorders.append(float(row["disorder"]))
+            moves.append(int(row["moves"]))
+            times.append(float(row["time"]))
+    return disorders, moves, times
+
+def compute_stats(moves):
+    worst = max(moves)
+    best = min(moves)
+    avg = sum(moves) / len(moves)
+    return worst, best, avg
+
 # --------------------------
 # Plotting
 # --------------------------
 def plot_single_from_csv(algo, size):
     """Plot one algorithm from CSV"""
     os.makedirs("plots", exist_ok=True)
-    filename = f"data/{algo}_n{size}.csv"
-    df = pd.read_csv(filename)
+    disorders, moves, times = read_results_csv(algo, size)
+    worst, best, avg = compute_stats(moves)
 
     fig, ax = plt.subplots(figsize=(10, 6))
-
-    # Scatter plot
-    scatter = ax.scatter(
-        df["time"],
-        df["moves"],
-        c=df["disorder"],
-        cmap="viridis",
-        alpha=0.8
-    )
+    scatter = ax.scatter(times, moves, c=disorders, cmap="viridis", alpha=0.8)
 
     # Labels and title
     ax.set_xlabel("CPU Time (s)")
@@ -159,9 +172,7 @@ def plot_single_from_csv(algo, size):
     cbar.set_label("Disorder")
 
     # Statistics box
-    worst = df["moves"].max()
-    best = df["moves"].min()
-    avg = df["moves"].mean()
+
     stats_text = (
         f"Worst moves: {worst}\n"
         f"Best moves:  {best}\n"
@@ -212,20 +223,9 @@ def plot_compare_from_csv(size):
         if not os.path.exists(filename):
             print(f"CSV file not found: {filename}, skipping {algo}")
             continue
-
-        df = pd.read_csv(filename)
-
-        scatter = ax.scatter(
-            df["time"],
-            df["moves"],
-            c=df["disorder"],
-            cmap="viridis",
-            alpha=0.7,
-            marker=marker,
-            edgecolors="k",
-            linewidths=0.3,
-            label=algo
-        )
+        disorders, moves, times = read_results_csv(algo, size)
+        ax.scatter(times, moves, c=disorders, cmap="viridis",
+                   alpha=0.7, marker=marker, edgecolors="k", linewidths=0.3, label=algo)
 
     # --------------------------
     # Axes labels and title
