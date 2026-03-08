@@ -223,9 +223,11 @@ def plot_compare_from_csv(size):
         if not os.path.exists(filename):
             print(f"CSV file not found: {filename}, skipping {algo}")
             continue
+
+        # Read CSV manually
         disorders, moves, times = read_results_csv(algo, size)
-        ax.scatter(times, moves, c=disorders, cmap="viridis",
-                   alpha=0.7, marker=marker, edgecolors="k", linewidths=0.3, label=algo)
+        scatter = ax.scatter(times, moves, c=disorders, cmap="viridis",
+                             alpha=0.7, marker=marker, edgecolors="k", linewidths=0.3, label=algo)
 
     # --------------------------
     # Axes labels and title
@@ -257,11 +259,10 @@ def plot_compare_from_csv(size):
         if not os.path.exists(filename):
             continue
 
-        df = pd.read_csv(filename)
-
-        worst = df["moves"].max()
-        best = df["moves"].min()
-        avg = df["moves"].mean()
+        disorders, moves, times = read_results_csv(algo, size)
+        worst = max(moves)
+        best = min(moves)
+        avg = sum(moves) / len(moves)
 
         stats_lines.append(
             f"{algo}\n"
