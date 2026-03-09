@@ -15,7 +15,7 @@ Results are saved as **CSV files and plots**.
 Go to your **push_swap project folder** and run :
 ---
 
-run this inside your oush swap folder
+run this inside your push swap folder
 ```bash
 make
 
