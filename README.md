@@ -25,24 +25,21 @@ Requirements:
 
 # 2. IMPORTANT
 
-You must place your compiled **`push_swap` executable** inside this folder.
+1. **go to your push swap project folder** and do:
+```bash
+make
+```
+copy the created push_swap executable to perf-pushswap/
 
-Example:
+2. You must place your compiled **`push_swap` executable** inside this folder.
 
+Result :
 ```
 perf-pushswap/
 ├── bench
 ├── src/
 ├── push_swap   <-- put it here
 ```
-
-Example compilation:
-
-```bash
-make
-cp ../push_swap ./push_swap
-```
-
 ---
 
 # 3. Quick Start
