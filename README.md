@@ -10,10 +10,11 @@ Results are saved as **CSV files and plots**.
 
 ---
 
-# Quick Start (copy-paste)
+# Quick Start
 
 ## IMPORTANT 
 **Go to your **push_swap project folder** and run** :
+---
 
 ```bash
 make
