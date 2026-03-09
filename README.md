@@ -1,7 +1,7 @@
 # perf-pushswap
 
 Simple CLI to benchmark a `push_swap` executable.
-Run it inside your push_swap folder.
+**Run it inside your push_swap folder.**
 
 It generates random sequences, runs `push_swap`, and records:
 - number of moves
