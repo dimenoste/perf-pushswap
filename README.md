@@ -12,8 +12,7 @@ Results are saved as **CSV files and plots**.
 
 # Quick Start
 
-## IMPORTANT 
-**Go to your **push_swap project folder** and run** :
+**IMPORTANT : Go to your **push_swap project folder** and run** :
 ---
 
 ```bash
