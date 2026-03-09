@@ -10,11 +10,23 @@ Results are saved as **CSV files and plots**.
 
 ---
 
-# 1. Installation
+# 1. IMPORTANT Installation
 
+**1. Go to your push swap folder project**
+
+Example :
+```bash
+cd <path to push swap project>
+make
+```
+
+**2. Install inside your push swap folder and run**
 ```bash
 git clone https://github.com/dimenoste/perf-pushswap.git
 cd perf-pushswap
+cp ../push_swap ./perf-pushswap
+
+./bench ./push_swap 100
 ```
 
 Requirements:
