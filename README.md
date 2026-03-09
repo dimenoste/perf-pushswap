@@ -12,9 +12,10 @@ Results are saved as **CSV files and plots**.
 
 # Quick Start
 
-**IMPORTANT : Go to your **push_swap project folder** and run** :
+Go to your **push_swap project folder** and run :
 ---
 
+run this inside your oush swap folder
 ```bash
 make
 
