@@ -16,7 +16,7 @@ Results are saved as **CSV files and plots**.
 
 Example :
 ```bash
-cd <path to push swap project>
+cd <path to your  push swap project>
 make
 ```
 
@@ -33,25 +33,6 @@ Requirements:
 - Python 3.8+
 - Bash
 
----
-
-# 2. IMPORTANT
-
-1. **go to your push swap project folder** and do:
-```bash
-make
-```
-copy the created push_swap executable to perf-pushswap/
-
-2. You must place your compiled **`push_swap` executable** inside this folder.
-
-Result :
-```
-perf-pushswap/
-├── bench
-├── src/
-├── push_swap   <-- put it here
-```
 ---
 
 # 3. Quick Start
