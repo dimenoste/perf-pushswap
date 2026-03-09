@@ -10,23 +10,28 @@ Results are saved as **CSV files and plots**.
 
 ---
 
-# 1. IMPORTANT Installation
+# Quick Start (copy-paste)
 
-**1. Go to your push swap folder project**
+Go to your **push_swap project folder** and run:
 
-Example :
 ```bash
-cd <path to your  push swap project>
 make
-```
 
-**2. Install inside your push swap folder and run**
-```bash
 git clone https://github.com/dimenoste/perf-pushswap.git
 cd perf-pushswap
+
 cp ../push_swap ./push_swap
 
 ./bench ./push_swap 100
+```
+
+This runs **200 benchmarks sorting 100 numbers**.
+
+Results appear in:
+
+```
+data/
+plots/
 ```
 
 Requirements:
@@ -35,26 +40,7 @@ Requirements:
 
 ---
 
-# 3. Quick Start
-
-Run a benchmark:
-
-```bash
-./bench ./push_swap 100
-```
-
-This runs **200 tests** sorting **100 numbers**.
-
-Results are saved in:
-
-```
-data/
-plots/
-```
-
----
-
-# 4. Basic Usage
+# Usage
 
 ```
 ./bench <push_swap_path> [size] [algorithm] [runs]
@@ -71,7 +57,7 @@ Arguments:
 
 ---
 
-# 5. Examples
+# Examples
 
 ### Default benchmark
 
@@ -83,7 +69,7 @@ Arguments:
 
 ---
 
-### Benchmark specific algorithm (new 42 subject)
+### Benchmark a specific algorithm
 
 ```bash
 ./bench ./push_swap 500 complex 500
@@ -94,9 +80,10 @@ Arguments:
 - runs: 500
 
 ![Example Plot](plots/complex_n500.png)
+
 ---
 
-### Compare all algorithms
+### Compare algorithms
 
 ```bash
 ./bench ./push_swap 500 compare 100
@@ -107,11 +94,11 @@ Runs:
 - `medium`
 - `complex`
 
-Produces a comparison plot to sort a list of 500 elements, 100 times.
+Produces a comparison plot.
 
 ---
 
-# 6. Clean generated data
+# Clean generated data
 
 ```bash
 ./bench clean
@@ -126,25 +113,13 @@ plots/
 
 ---
 
-# 7. Output files
+# Output
 
 ```
 data/<algorithm>_n<size>.csv
-```
-
-Raw benchmark data.
-
-```
 plots/<algorithm>_n<size>.png
-```
-
-Plot for a single algorithm.
-
-```
 plots/compare_n<size>.png
 ```
-
-Comparison plot between algorithms.
 
 ---
 
@@ -153,5 +128,3 @@ Comparison plot between algorithms.
 - `push_swap` must be executable.
 - `size` must be >1 and ≤1000.
 - `runs` must be >2.
-- Algorithms (new subject):  
-  `simple`, `medium`, `complex`, `adaptive`.
