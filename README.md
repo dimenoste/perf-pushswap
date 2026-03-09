@@ -24,7 +24,7 @@ make
 ```bash
 git clone https://github.com/dimenoste/perf-pushswap.git
 cd perf-pushswap
-cp ../push_swap ./perf-pushswap
+cp ../push_swap ./push_swap
 
 ./bench ./push_swap 100
 ```
