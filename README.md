@@ -54,7 +54,7 @@ Arguments:
 ```
 <push_swap_path>   path to push_swap executable
 [size]             number of integers (>1)
-[algorithm]        simple | medium | complex | adaptive | compare
+[algorithm]        simple | medium | complex | adaptive | compare  !!! RELEVANT ONLY FOR THE NEW 2025 VERSION OF THE PROJECT
 [runs]             number of runs (default 200)
 ```
 
