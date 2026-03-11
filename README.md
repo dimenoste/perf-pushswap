@@ -58,6 +58,16 @@ Arguments:
 [runs]             number of runs (default 200)
 ```
 
+The algorithm are flags we had to implement for the **new 2025 subject**  :
+
+**simple** for a O(n2) complexity algorithm
+**medium** for a O(n * 1/2) algorithm
+**complex** ffor a O(nlogn) algorithm 
+So in total, the new 2025 push-swap project asked the student to  implement 3 different algorithm to sort the stack.
+Yet, the argument **compare** is to make a plot with all three algorithms
+
+If you did your push_swap project before november 2025, or if you are still on the old common-core), you have only one algorithm and you dont need the `algorithm` option.
+
 ---
 
 # Examples
