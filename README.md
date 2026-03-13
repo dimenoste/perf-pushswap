@@ -31,11 +31,7 @@ cp ../push_swap ./push_swap
 This runs **200 benchmarks sorting 100 numbers**.
 
 Results appear in:
-
-```
-data/
-plots/
-```
+`data/` and `plots/`
 
 Requirements:
 - Python 3.8+
