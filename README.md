@@ -13,10 +13,10 @@ Results are saved as **CSV files and plots**.
 
 # Quick Start
 
-Go to your **push_swap project folder** and run :
+Go to your **push_swap project folder** and copy-paste :
 ---
 
-run this inside your push swap folder
+copy-paste the following block **inside your push swap folder**
 ```bash
 make
 
