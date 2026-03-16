@@ -12,9 +12,6 @@ VENV_DIR="./pushswap_env"
 SCRIPT="./src/benchmark.py"
 REQ_FILE="requirements.txt"
 
-
-
-
 # --------------------------
 # Help / Usage
 # --------------------------
@@ -25,20 +22,19 @@ if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     echo "Arguments / Options:"
     echo "  <push_swap_path>   Path to your push_swap executable"
     echo "  [size]             Number of integers in the list (integer > 1)"
-    echo "  [algorithm]        Optional: (only for new pushswap project as of 2026) simple | medium | complex  | adaptive | compare"
+    echo "  [algorithm]        Optional: simple | medium | complex | adaptive | compare"
     echo "                     If omitted, the project can choose the algorithm internally"
     echo "  [runs]             Optional: number of runs per algorithm (default: 200)"
     echo "  clean              Remove all data CSVs and plots"
     echo ""
     echo "Examples:"
-    echo "  ./bench ./push_swap 10               # Benchmark default algorithm to sort 10 numbers. Simulate 200 runs"
-    echo "  ./bench ./push_swap 50 simple        # Benchmark 'simple' algorithm to sort 50 numbers. Simulate 50 runs"
-    echo "  ./bench ./push_swap 20 medium 100    # Benchmark 'medium' algorithm to sort 20 numbers. Simulate 100 runs"
-    echo "  ./bench ./push_swap compare 50       # Compare all algorithms  to sort 50 numbers. 200 runs"
-    echo "  ./bench clean                         # Remove all data and plots"
+    echo "  ./bench ./push_swap 10"
+    echo "  ./bench ./push_swap 50 simple"
+    echo "  ./bench ./push_swap 20 medium 100"
+    echo "  ./bench ./push_swap compare 50"
+    echo "  ./bench clean"
     exit 0
 fi
-
 
 # --------------------------
 # Clean
@@ -68,12 +64,19 @@ if [ ! -x "$PUSH_SWAP" ]; then
     exit 1
 fi
 
-
 # --------------------------
 # Ensure Python3 exists
 # --------------------------
 if ! command -v python3 &> /dev/null; then
     echo "Python3 is required."
+    exit 1
+fi
+
+# --------------------------
+# Ensure uv exists
+# --------------------------
+if ! command -v uv &> /dev/null; then
+    echo "Error: uv is required but not installed."
     exit 1
 fi
 
@@ -88,30 +91,26 @@ fi
 # Try to use venv if available, else create one
 # --------------------------
 VENV_PY="$VENV_DIR/bin/python"
-VENV_PIP="$VENV_DIR/bin/pip"
 USE_VENV=0
 
 if [ -d "$VENV_DIR" ] && [ -f "$VENV_PY" ] && "$VENV_PY" -c "import matplotlib" &> /dev/null; then
     USE_VENV=1
 else
     echo "Creating isolated Python environment..."
-    if python3 -m venv "$VENV_DIR"; then
+    if uv venv "$VENV_DIR"; then
         USE_VENV=1
-        "$VENV_PY" -m pip install --upgrade pip
-        "$VENV_PIP" install -r "$REQ_FILE"
+        uv pip install --python "$VENV_PY" -r "$REQ_FILE"
     else
         echo "Warning: could not create venv, falling back to system Python."
         USE_VENV=0
     fi
 fi
 
-
-
 # --------------------------
 # Run benchmark
 # --------------------------
 if [ "$USE_VENV" -eq 1 ]; then
-    "$VENV_PY" "$SCRIPT" "$@"
+    uv run --python "$VENV_PY" "$SCRIPT" "$@"
 else
     python3 "$SCRIPT" "$@"
 fi
