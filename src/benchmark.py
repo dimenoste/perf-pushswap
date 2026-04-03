@@ -9,16 +9,18 @@ import csv
 from collections import defaultdict
 import shutil
 import sys
+from multiprocessing import Process, Pool
+import multiprocessing
 
 # --------------------------
 # Configuration
 # --------------------------
 MAX_INT = 1000  # default maximum integer in sequences
 
+
 # --------------------------
 # Utilities
 # --------------------------
-
 def count_inversions(nums):
     """Count all pair inversions (full-pair disorder)."""
     inv = 0
@@ -78,6 +80,7 @@ def generate_benchmark_list(size, target_fraction):
         actual_disorder = compute_disorder(nums)
     return nums, actual_disorder
 
+
 # --------------------------
 # push_swap runner
 # --------------------------
@@ -93,10 +96,10 @@ def run_pushswap(pushswap, algo, nums):
     moves = len(out.splitlines())  # Push_swap outputs one instruction per line
     return end - start, moves
 
+
 # --------------------------
 # Benchmarking
 # --------------------------
-
 def benchmark(pushswap, algos, size, runs):
     results = defaultdict(lambda: {"moves": [], "disorder": [], "time": []})
     for run in range(runs):
@@ -105,16 +108,46 @@ def benchmark(pushswap, algos, size, runs):
         for algo in algos:
             algo_key = "default" if algo is None else algo
             t, m = run_pushswap(pushswap, algo, nums)
-            results[algo_key]["moves"].append(m)
-            results[algo_key]["disorder"].append(actual_disorder)
-            results[algo_key]["time"].append(t)
+            results[run][algo_key]["moves"].append(m)
+            results[run][algo_key]["disorder"].append(actual_disorder)
+            results[run][algo_key]["time"].append(t)
             print(f"run={run+1}/{runs} algo={algo_key} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
     return results
 
 # --------------------------
-# CSV saving
+# Benchmarking multiprocessing
 # --------------------------
 
+def one_run_bench(pushswap, algos, size, run, totals_runs, result_dict):
+    target_disorder = 0.01 + 0.98 * run / max(1, runs - 1)
+    nums, actual_disorder = generate_benchmark_list(size, target_disorder)
+    for algo in algos:
+        algo_key = "default" if algo is None else algo
+        t, m = run_pushswap(pushswap, algo, nums)
+        result_dict[run][algo_key]["moves"].append(m)
+        result_dict[run][algo_key]["disorder"].append(actual_disorder)
+        result_dict[run][algo_key]["time"].append(t)
+        print(f"run={run+1}/{totals_runs} algo={algo_key} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
+    return results
+
+
+def benchmark_multi(pushswap, algos, size, runs):
+    inputs = [k for k in range(runs)]
+    results = defaultdict(lambda: {"runs": [], "moves": [], "disorder": [], "time": []})
+    with Pool() as pool:
+        results = pool.Process(one_run_bench, inputs, args=(pushswap, algos, size))
+        pool.start()
+        pool.join()
+    return results
+
+
+
+
+
+
+# --------------------------
+# CSV saving
+# --------------------------
 def save_results_csv(results, algo, size):
     """Save results for reproducibility"""
     os.makedirs("data", exist_ok=True)
@@ -130,7 +163,6 @@ def save_results_csv(results, algo, size):
 # --------------------------
 # CSV Reading and Stats
 # --------------------------
-
 def read_results_csv(algo, size):
     """Read CSV and return disorder[], moves[], times[] as lists"""
     filename = f"data/{algo}_n{size}.csv"
@@ -143,11 +175,13 @@ def read_results_csv(algo, size):
             times.append(float(row["time"]))
     return disorders, moves, times
 
+
 def compute_stats(moves):
     worst = max(moves)
     best = min(moves)
     avg = sum(moves) / len(moves)
     return worst, best, avg
+
 
 # --------------------------
 # Plotting
@@ -302,13 +336,11 @@ def plot_compare_from_csv(size):
     print(f"Saved comparison plot from CSV: file://{abs_path}")
 
 
-
 def positive_int_greater_one(value):
     ivalue = int(value)
     if ivalue <= 1:
         raise argparse.ArgumentTypeError(f"size must be greater than 1, got {value}")
     return ivalue
-
 
 
 def main():
