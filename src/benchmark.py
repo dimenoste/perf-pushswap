@@ -108,9 +108,9 @@ def benchmark(pushswap, algos, size, runs):
         for algo in algos:
             algo_key = "default" if algo is None else algo
             t, m = run_pushswap(pushswap, algo, nums)
-            results[run][algo_key]["moves"].append(m)
-            results[run][algo_key]["disorder"].append(actual_disorder)
-            results[run][algo_key]["time"].append(t)
+            results[algo_key]["moves"].append(m)
+            results[algo_key]["disorder"].append(actual_disorder)
+            results[algo_key]["time"].append(t)
             print(f"run={run+1}/{runs} algo={algo_key} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
     return results
 
@@ -118,30 +118,33 @@ def benchmark(pushswap, algos, size, runs):
 # Benchmarking multiprocessing
 # --------------------------
 
-def one_run_bench(pushswap, algos, size, run, totals_runs, result_dict):
+total_run = 10
+arguments = (pushswap, algos, size, runs)
+run = [k for k in range(totals_runs)]
+
+map(lambda x: (x, arguments), run)
+
+
+
+def one_run(set_args):
+    results = defaultdict(lambda: {"moves": [], "disorder": [], "time": []})
     target_disorder = 0.01 + 0.98 * run / max(1, runs - 1)
     nums, actual_disorder = generate_benchmark_list(size, target_disorder)
     for algo in algos:
         algo_key = "default" if algo is None else algo
         t, m = run_pushswap(pushswap, algo, nums)
-        result_dict[run][algo_key]["moves"].append(m)
-        result_dict[run][algo_key]["disorder"].append(actual_disorder)
-        result_dict[run][algo_key]["time"].append(t)
-        print(f"run={run+1}/{totals_runs} algo={algo_key} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
+        results[algo_key]["moves"].append(m)
+        results[algo_key]["disorder"].append(actual_disorder)
+        results[algo_key]["time"].append(t)
+        print(f"run={run+1}/{runs} algo={algo_key} disorder={actual_disorder:.3f} moves={m} time={t:.4f}s")
     return results
 
 
-def benchmark_multi(pushswap, algos, size, runs):
-    inputs = [k for k in range(runs)]
-    results = defaultdict(lambda: {"runs": [], "moves": [], "disorder": [], "time": []})
+def run_parallel():
+    inputs = [k for k in range(total_runs)]
     with Pool() as pool:
-        results = pool.Process(one_run_bench, inputs, args=(pushswap, algos, size))
-        pool.start()
-        pool.join()
-    return results
-
-
-
+            out = pool.map(one_run, inputs)
+        print(out)
 
 
 
@@ -424,7 +427,7 @@ def main():
     # --------------------------
     # Run benchmark
     # --------------------------
-    results = benchmark(pushswap, algos, size, runs)
+    results = benchmark_multi(pushswap, algos, size, runs)
 
     # Save CSV
     for a in algos:
